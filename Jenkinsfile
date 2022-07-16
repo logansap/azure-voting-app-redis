@@ -4,7 +4,19 @@ pipeline {
     stages {
         stage('Verify Git Repo') {
             steps {
-                sh(script: echo 'Hello World')
+                echo "$GIT_BRANCH"
+            }
+        }
+        stage('Docker Build') {
+            steps {
+                sh(script: 'docker images -a')
+                sh(script: """
+                   cd azure-vote
+                   docker images -a
+                   docker build -t jenkins-pipeline .
+                   docker images -a
+                   cd ..
+                """)
             }
         }
     }
